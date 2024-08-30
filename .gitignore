@@ -2,3 +2,4 @@
 .idea
 backend/FlightSearch/.gradle
 backend/FlightSearch/build
+backend/FlightSearch/src/main/resources/application.properties
