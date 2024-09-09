@@ -1,8 +1,13 @@
 package com.chelsea.FlightSearch.Models;
 
-class Fee {
+public class Fee {
     private float amount;
     private String type;
+
+    public Fee(String type, float amount) {
+        this.type = type;
+        this.amount = amount;
+    }
 
     public float getAmount() {
         return amount;

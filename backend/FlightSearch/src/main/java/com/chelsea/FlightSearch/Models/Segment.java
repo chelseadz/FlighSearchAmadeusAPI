@@ -1,141 +1,182 @@
 package com.chelsea.FlightSearch.Models;
+import com.chelsea.FlightSearch.Services.AmadeusService;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Segment {
-    private String departureCode;
-    private LocalDateTime departureTime;
-    private String arrivalCode;
-    private LocalDateTime arrivalTime;
-    private String carrierCode;
-    private String number;
-    private String aircraftCode;
-    private String duration;
     private String id;
+    private String departureAirport;
+    private String departureAirportCity;
+    private LocalDateTime departureTime;
+    private String arrivalAirport;
+    private String arrivalAirportCity;
+    private LocalDateTime arrivalTime;
+    private String arrivalTerminal;
+    private String departureTerminal;
+    private String carrierCode;
+    private String carrierCodeOperating;
+    private String carrierName;
+    private String carrierNameOperating;
+    private String aircraftCode;
+    private String aircraftName;
+    private Duration duration;
     private String cabin;
-    private String fareBasis;
-    private String flightClass;
-    private int numberOfStops;
-    private boolean blacklistedInEU;
+    private String brandedFareLabel;
+    private String fareClass;
+    private boolean includedCheckedBags;
+    private String checkedBagsWeight;
+    private String weightUnit;
+    private int checkedBagsQuantity;
+    private ArrayList<String> amenities;
 
-    public String getDepartureCode() {
-        return departureCode;
+    public Segment(JSONObject segmentObject, JSONObject flightObject) {
+        id = segmentObject.getString("id");
+        departureAirport = segmentObject.getJSONObject("departure").getString("iataCode");
+        departureTime = LocalDateTime.parse(segmentObject.getJSONObject("departure").getString("at"));
+        arrivalAirport = segmentObject.getJSONObject("arrival").getString("iataCode");
+        arrivalTime = LocalDateTime.parse(segmentObject.getJSONObject("arrival").getString("at"));
+        arrivalTerminal = getStringFromJSON(segmentObject, "arrival", "terminal");
+        departureTerminal = getStringFromJSON(segmentObject, "departure", "terminal");
+        carrierCode = segmentObject.getString("carrierCode");
+        carrierCodeOperating = getStringFromJSON(segmentObject, "operating", "carrierCode");
+        aircraftCode = segmentObject.getJSONObject("aircraft").getString("code");
+        duration = Duration.parse(segmentObject.getString("duration"));
+
+        departureAirportCity = AmadeusService.getCity(departureAirport);
+        arrivalAirportCity = AmadeusService.getCity(arrivalAirport);
+        carrierName = AmadeusService.getAirline(carrierCode);
+        carrierNameOperating = AmadeusService.getAirline(carrierCodeOperating);
+        aircraftName = AmadeusService.getAircraft(aircraftCode);
+
+        JSONObject json;
+        JSONArray segments = flightObject.getJSONArray("travelerPricings").getJSONObject(0).getJSONArray("fareDetailsBySegment");
+        for(int i = 0; i < segments.length(); i++) {
+            json = segments.getJSONObject(i);
+            if(json.getString("segmentId").equals(id)) {
+                cabin = json.getString("cabin");
+                brandedFareLabel = json.optString("brandedFareLabel");
+                fareClass = json.getString("class");
+                includedCheckedBags = (json.optJSONObject("includedCheckedBags") != null);
+                checkedBagsQuantity = json.optJSONObject("includedCheckedBags").optInt("quantity");
+                checkedBagsWeight = json.optJSONObject("includedCheckedBags").optString("weight");
+                weightUnit = json.optJSONObject("includedCheckedBags").optString("weightUnit");
+                amenities = new ArrayList<>();
+                JSONArray amenitiesArray = json.optJSONArray("amenities");
+
+                if (amenitiesArray != null) {
+                    for (int j = 0; j < amenitiesArray.length(); j++) {
+                        amenities.add(amenitiesArray.getJSONObject(j).getString("description"));
+                    }
+                }
+            }
+        }
     }
 
-    public void setDepartureCode(String departureCode) {
-        this.departureCode = departureCode;
+    private static String getStringFromJSON(JSONObject segmentObject, String objectStr, String valueStr) {
+        try {
+            return segmentObject.getJSONObject(objectStr).getString(valueStr);
+        }catch (Exception e){
+            return "";
+        }
+    }
+
+    public String getDepartureAirport() {
+        return departureAirport;
     }
 
     public LocalDateTime getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(LocalDateTime departureTime) {
-        this.departureTime = departureTime;
-    }
-
-    public String getArrivalCode() {
-        return arrivalCode;
-    }
-
-    public void setArrivalCode(String arrivalCode) {
-        this.arrivalCode = arrivalCode;
+    public String getArrivalAirport() {
+        return arrivalAirport;
     }
 
     public LocalDateTime getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(LocalDateTime arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
-
-    public String getCarrierCode() {
-        return carrierCode;
-    }
-
-    public void setCarrierCode(String carrierCode) {
-        this.carrierCode = carrierCode;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
+    public Duration getDuration() {
+        return duration;
     }
 
     public String getAircraftCode() {
         return aircraftCode;
     }
 
-    public void setAircraftCode(String aircraftCode) {
-        this.aircraftCode = aircraftCode;
+    public String getCarrierCodeOperating() {
+        return carrierCodeOperating;
     }
 
-    public String getDuration() {
-        return duration;
+    public String getCarrierCode() {
+        return carrierCode;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
+    public String getArrivalTerminal() {
+        return arrivalTerminal;
     }
 
-    public String getId() {
-        return id;
+    public String getDepartureTerminal() {
+        return departureTerminal;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getDepartureAirportCity() {
+        return departureAirportCity;
+    }
+
+    public String getArrivalAirportCity() {
+        return arrivalAirportCity;
     }
 
     public String getCabin() {
         return cabin;
     }
 
-    public void setCabin(String cabin) {
-        this.cabin = cabin;
+    public String getBrandedFareLabel() {
+        return brandedFareLabel;
     }
 
-    public String getFareBasis() {
-        return fareBasis;
+    public String getFareClass() {
+        return fareClass;
     }
 
-    public void setFareBasis(String fareBasis) {
-        this.fareBasis = fareBasis;
+    public ArrayList<String> getAmenities() {
+        return amenities;
     }
 
-    public String getFlightClass() {
-        return flightClass;
+    public String getId() {
+        return id;
     }
 
-    public void setFlightClass(String flightClass) {
-        this.flightClass = flightClass;
-    }
-
-    public int getNumberOfStops() {
-        return numberOfStops;
-    }
-
-    public void setNumberOfStops(int numberOfStops) {
-        this.numberOfStops = numberOfStops;
-    }
-
-    public boolean isBlacklistedInEU() {
-        return blacklistedInEU;
-    }
-
-    public void setBlacklistedInEU(boolean blacklistedInEU) {
-        this.blacklistedInEU = blacklistedInEU;
-    }
-
-    public int getIncludedCheckedBags() {
+    public boolean isIncludedCheckedBags() {
         return includedCheckedBags;
     }
 
-    public void setIncludedCheckedBags(int includedCheckedBags) {
-        this.includedCheckedBags = includedCheckedBags;
+    public String getCheckedBagsWeight() {
+        return checkedBagsWeight;
     }
 
-    private int includedCheckedBags;
+    public String getWeightUnit() {
+        return weightUnit;
+    }
+
+    public int getCheckedBagsQuantity() {
+        return checkedBagsQuantity;
+    }
+
+    public String getCarrierName() {
+        return carrierName;
+    }
+
+    public String getCarrierNameOperating() {
+        return carrierNameOperating;
+    }
+
+    public String getAircraftName() {
+        return aircraftName;
+    }
 }

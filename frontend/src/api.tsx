@@ -2,8 +2,24 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:8080/';
 
-export const fetchAirports = async (keyword: String, maxAirports: String) => {
-    const params = { keyword: keyword, maxAirports: maxAirports};
+export const fetchSortedPaginatedFlights = async (page: number, value: String, checked: boolean) => {
+    const params = { page: page, value: value, checked: checked};
+    const {data} = await axios.get(API_URL+"sorted-pagination",{
+        params:params,
+    });
+    return data;
+}
+
+export const fetchPaginatedFlights = async (page: number) => {
+    const params = { page: page};
+    const {data} = await axios.get(API_URL+"pagination",{
+        params:params,
+    });
+    return data;
+}
+
+export const fetchAirports = async (keyword: String) => {
+    const params = { keyword: keyword};
     const { data } = await axios.get(API_URL+"airports",{
         params:params,
     });

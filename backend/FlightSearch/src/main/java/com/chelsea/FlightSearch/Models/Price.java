@@ -1,11 +1,30 @@
 package com.chelsea.FlightSearch.Models;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
-class Price {
+public class Price {
     private String currency;
     private float total;
     private float base;
-    private List<Fee> fees;
+    private List<Fee> fees = new ArrayList<Fee>();
+
+    public Price(JSONObject priceObject) {
+        this.currency = priceObject.getString("currency");
+        this.total = Float.parseFloat(priceObject.getString("total"));
+        this.base = Float.parseFloat(priceObject.getString("base"));
+        constructFees(priceObject.getJSONArray("fees"));
+    }
+
+    private void constructFees(JSONArray feesArray) {
+        JSONObject fee;
+        for (int k = 0; k < feesArray.length(); k++) {
+            fee = feesArray.getJSONObject(k);
+            fees.add(new Fee(fee.getString("type"), fee.getFloat("amount")));
+        }
+    }
 
     public String getCurrency() {
         return currency;

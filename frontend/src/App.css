@@ -1,38 +1,185 @@
 .App {
   text-align: center;
+  font-family: "Nunito", sans-serif;
+  background: antiquewhite;
+  margin: 16px;
+  padding: 16px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.checkbox-row {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-top: 15px;
 }
 
-.App-link {
-  color: #61dafb;
+.checkbox-row label {
+  margin: 0;
+  font-size: 14px;
 }
 
-@keyframes App-logo-spin {
-  from {
+.form-group {
+  top: 10px;
+  margin-right: 10px;
+}
+
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group input,
+.form-group select {
+  height: 30px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-group input {
+  width: 150px;
+}
+
+.form-group select {
+  width: 120px;
+}
+
+button {
+  height: 20px;
+  padding: 0 10px;
+  border: none;
+  background-color: #ccc;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #aaa;
+}
+.flight-card {
+  border: 1px solid #000000;
+  padding: 16px;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: seagreen;
+}
+
+.left-container{
+
+}
+
+.right-container{
+
+}
+
+.itinerary {
+  border: 1px solid violet;
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  background-color: darkseagreen;
+}
+
+.itinerary-info {
+  flex-direction: column;
+  padding: 16px;
+  text-align: left;
+}
+
+.itinerary-price {
+  flex-direction: column;
+  padding: 16px;
+}
+
+.segment {
+  border: 1px solid violet;
+  background-color: darkseagreen;
+  padding: 16px;
+  margin: 16px;
+  display: flex;
+  flex-direction: row;
+}
+
+.segment-info {
+  flex-direction: column;
+  padding: 16px;
+  text-align: left;
+}
+
+.fare-details {
+  border: 1px solid violet;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.price-breakdown{
+  border: 1px solid violet;
+  background-color: darkseagreen;
+  flex-direction: column;
+  padding: 16px;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.button {
+  margin-bottom: 16px;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.loading-spinner {
+  border: 8px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #09f;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
   }
 }
+
+
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 10px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.pagination a {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.pagination a:hover {
+  background-color: #ddd;
+}
+
+
+
+
