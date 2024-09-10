@@ -23,7 +23,7 @@ const FlightResults = ({ flights, onReturnToSearch, onShowDetails, onSort}: any)
     return (
         <div>
             <div className="pagination-container">
-                <button onClick={onReturnToSearch}> Return to Search</button>
+                <button name="returnSearch" onClick={onReturnToSearch}> Return to Search</button>
                 <p><input
                     type="checkbox"
                     name="price"

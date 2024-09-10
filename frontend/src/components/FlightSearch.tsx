@@ -1,5 +1,5 @@
 import React, {useState, FormEvent, useEffect, useRef} from 'react';
-import {Money, Flight} from "../customTypes"
+import {Money, Flight, Airport} from "../customTypes"
 import {fetchAirports, fetchFlights} from "../api";
 import LoadingSpinner from "./LoadingSpinner";
 
@@ -34,9 +34,19 @@ const FlightSearch = ({ onSearch}: { onSearch: (flights: Flight[], totalItems: n
         }
     };
 
-    const handleSubmit = (event: FormEvent) => {
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        searchFlights()
+
+        const form = event.currentTarget;
+        const departure = (form.elements.namedItem('departureAirport') as HTMLInputElement).value;
+        const arrival = (form.elements.namedItem('arrivalAirport') as HTMLInputElement).value;
+
+        if( filteredDepartureAirports.map((airport: Airport) => airport['iata']).includes(departure.toUpperCase()) &&
+            filteredArrivalAirports.map((airport: Airport) => airport['iata']).includes(arrival.toUpperCase())
+        )
+            searchFlights()
+        else
+            alert("Please select a valid airport");
     }
 
     const [filteredDepartureAirports, setFilteredDepartureAirports] = useState([]);
@@ -45,7 +55,7 @@ const FlightSearch = ({ onSearch}: { onSearch: (flights: Flight[], totalItems: n
 
     useEffect(() =>{
         const fetchAndSetDeparture = async () => {
-            if(departureAirport && requestCount<3 && departureAirport.length<30) {
+            if(departureAirport && requestCount<5 && departureAirport.length<30) {
                 incrementRequestCounter();
                 try {
                     const airports: [] = await fetchAirports(departureAirport);
@@ -61,7 +71,7 @@ const FlightSearch = ({ onSearch}: { onSearch: (flights: Flight[], totalItems: n
 
     useEffect(() =>{
         const fetchAndSetArrival = async () => {
-            if (arrivalAirport && requestCount<3 && arrivalAirport.length<30) {
+            if (arrivalAirport && requestCount<5 && arrivalAirport.length<30) {
                 incrementRequestCounter();
                 try {
                     const airports = await fetchAirports(arrivalAirport);
@@ -187,13 +197,13 @@ const FlightSearch = ({ onSearch}: { onSearch: (flights: Flight[], totalItems: n
                     <option value="EUR">EUR</option>
                 </select>
                 <div className="checkbox-row">
-                    <input type="checkbox" name="nonStop"
+                    <label htmlFor="nonStop">Non-stop</label>
+                    <input type="checkbox" id="nonStop"
                            onChange={(e) => setNonStop(Boolean(e.target.value))}/>
-                    <label>Non-stop</label>
                 </div>
                 <div>
-                    <label>Adults:</label>
-                    <input type="number" min="1" placeholder="Enter number of adults"
+                    <label htmlFor="adults">Adults:</label>
+                    <input type="number" name="adults" id="adults" min="1" placeholder="Enter number of adults"
                            onChange={(e) => setAdults(Number(e.target.value))}/>
                 </div>
             </div>

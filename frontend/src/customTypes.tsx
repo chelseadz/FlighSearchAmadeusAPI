@@ -1,6 +1,11 @@
 
 export type Money = "MXN" | "USD" | "EUR";
 
+export type Airport = {
+    iata: string;
+    name: string;
+};
+
 export type Segment = {
     aircraftName: string;
     amenities: string[];
