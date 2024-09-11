@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const API_URL = 'http://172.20.6.192:8080/';
+const API_URL = 'http://localhost:8080/';
 
 export const fetchSortedPaginatedFlights = async (page: number, value: String, checked: boolean) => {
     const params = { page: page, value: value, checked: checked};
