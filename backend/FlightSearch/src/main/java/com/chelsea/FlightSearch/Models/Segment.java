@@ -69,7 +69,12 @@ public class Segment {
 
                 if (amenitiesArray != null) {
                     for (int j = 0; j < amenitiesArray.length(); j++) {
-                        amenities.add(amenitiesArray.getJSONObject(j).getString("description"));
+                        boolean charge = amenitiesArray.getJSONObject(j).getBoolean("isChargeable");
+                        amenities.add(
+                                amenitiesArray.getJSONObject(j).getString("description") +
+                                ": " +
+                                (charge ? "Is chargeable" : "Non chargeable")
+                        );
                     }
                 }
             }

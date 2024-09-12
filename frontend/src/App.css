@@ -6,6 +6,17 @@
   padding: 16px;
 }
 
+.small-text {
+  text-align: right;
+  font-size: 14px;
+  color: black;
+}
+
+.inline-text {
+  display: inline;
+  margin-right: 5px;
+}
+
 .checkbox-row {
   display: flex;
   align-items: center;
@@ -18,13 +29,22 @@
   font-size: 14px;
 }
 
+.search-form {
+  align-items: center;
+  justify-content: space-evenly;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+}
+
 .form-group {
   top: 10px;
   margin-right: 10px;
+  flex-direction: column;
 }
 
-
 .form-section {
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 15px;

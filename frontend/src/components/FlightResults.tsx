@@ -77,9 +77,10 @@ const FlightResults = ({ flights, onReturnToSearch, onShowDetails, onSort}: any)
                     </div>
                     <div className="right-container">
                         <div className="price-breakdown">
-                            <p>{flight.price.currency} ${flight.price.total.toFixed(2)} total</p>
+                            <p>{flight.price.currency} ${flight.price.total.toFixed(2)}</p>
+                            <p className="small-text"> total</p>
                             <p>{flight.price.currency} ${(flight.price.total / flight.travelers).toFixed(2)} </p>
-                            <p>Per traveler</p>
+                            <p className="small-text">Per traveler</p>
                         </div>
                         <button onClick={() => onShowDetails(flight)}> Expand Details</button>
                     </div>

@@ -21,8 +21,9 @@ const FlightDetails = ({ flight, onReturnToSearch, onReturnToResults }: any) => 
                         {itinerary.segments.map((segment: Segment, index: number) =>
                             <div key={segment.id.toString()} className="segment">
                                 <div className="segment-info">
-                                    <p> {"Segment " + (index + 1)}</p>
-                                    <p>Departure: {segment.departureAirportCity} {segment.departureAirport}</p>
+                                    <h3> {"Segment " + (index + 1)}</h3>
+                                    <h4 className='inline-text'>Departure:</h4>
+                                    <p className="inline-text"> {segment.departureAirportCity} {segment.departureAirport}</p>
                                     <p>
                                         {new Date(segment.departureTime).toLocaleDateString([], {
                                             year: 'numeric',
@@ -33,9 +34,8 @@ const FlightDetails = ({ flight, onReturnToSearch, onReturnToResults }: any) => 
                                         minute: '2-digit'
                                     })}
                                     </p>
-                                    <p>
-                                        Arrival: {segment.arrivalAirportCity} {segment.arrivalAirport}
-                                    </p>
+                                    <h4 className="inline-text"> Arrival: </h4>
+                                    <p className="inline-text"> {segment.arrivalAirportCity} {segment.arrivalAirport} </p>
                                     <p>
                                         {new Date(segment.arrivalTime).toLocaleDateString([], {
                                             year: 'numeric',
@@ -46,11 +46,10 @@ const FlightDetails = ({ flight, onReturnToSearch, onReturnToResults }: any) => 
                                         minute: '2-digit'
                                     })}
                                     </p>
+                                    
+                                    <h4 className="inline-text">{(segment.carrierCodeOperating !== '') ? "operating:" : ""}</h4>
+                                    <p className="inline-text">{(segment.carrierCodeOperating !== '') ? segment.carrierNameOperating : ''}</p>
 
-                                    <p>
-                                        {`${(segment.carrierCodeOperating !== '') ? "operating:" : ""}
-                                            ${segment.carrierNameOperating}`}
-                                    </p>
 
                                     <p> Aircraft: {segment.aircraftCode} ({segment.aircraftName})</p>
                                 </div>
@@ -61,12 +60,15 @@ const FlightDetails = ({ flight, onReturnToSearch, onReturnToResults }: any) => 
                                 </div>
 
                                 <div className="fare-details">
-                                    <p>Travelers fareDetails</p>
-                                    <p>Cabin: {segment.cabin}</p>
-                                    <p>Class: {segment.fareClass}</p>
-                                    <p>{segment.brandedFareLabel ? "Fare:" : ""}{segment.brandedFareLabel}</p>
+                                    <h3>Travelers fareDetails</h3>
+                                    <h4 className="inline-text">Cabin: </h4>
+                                    <p className="inline-text">{segment.cabin}</p> <p></p>
+                                    <h4 className="inline-text">Class: </h4>
+                                    <p className="inline-text">{segment.fareClass}</p> <p></p>
+                                    <h4 className="inline-text">{segment.brandedFareLabel ? "Fare:" : ""}</h4>
+                                    <p className="inline-text">{segment.brandedFareLabel}</p>
                                     <p>{segment.checkedBagsWeight ? `Bags: ${segment.checkedBagsQuantity} bag${segment.checkedBagsQuantity>1 ? "s" : ""}${segment.checkedBagsWeight} ${segment.weightUnit}` : ""}</p>
-                                    {segment.amenities.length >0 ? "Amenities:" : ""}
+                                    {segment.amenities.length >0 ? <h4>Amenities:</h4> : ""}
                                     {segment.amenities.map((amenity: string, index: number) => (
                                         <p key={index.toString()} >{amenity}</p>
                                     ))}
@@ -75,10 +77,12 @@ const FlightDetails = ({ flight, onReturnToSearch, onReturnToResults }: any) => 
                     </div>
                     <div className="right-container">
                         <div className="price-breakdown">
-                            <p>Price Breakdown</p>
-                            <p>{flight.price.currency} {flight.price.total.toFixed(2)} total</p>
-                            <p>{flight.price.currency} {flight.price.base.toFixed(2)} base</p>
-                            <p>Fees: </p>
+                            <h4>Price Breakdown</h4>
+                            <p className="inline-text">{flight.price.currency} {flight.price.total.toFixed(2)}</p>
+                            <h4 className="inline-text"> total</h4> <p></p>
+                            <p className="inline-text">{flight.price.currency} {flight.price.base.toFixed(2)}</p>
+                            <h4 className="inline-text"> base</h4>
+                            <h4>Fees: </h4>
                             {flight.price.fees.map((fee: Fee) => (
                                 <p key={fee.type}>{fee.type} ${fee.amount} </p>
                             ))}

@@ -49,9 +49,25 @@ const FlightSearch = ({ onSearch}: { onSearch: (flights: Flight[], totalItems: n
             alert("Please select a valid airport");
     }
 
+    const [requestCount, setRequestCount] = useState<number>(0);
+    const requestCountRef = useRef(0);
+
+    const incrementRequestCounter = () => {
+        requestCountRef.current += 1;
+        setRequestCount(requestCountRef.current);
+    };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setRequestCount(requestCountRef.current);
+            requestCountRef.current = 0;
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     const [filteredDepartureAirports, setFilteredDepartureAirports] = useState([]);
     const [filteredArrivalAirports, setFilteredArrivalAirports] = useState([]);
-
 
     useEffect(() =>{
         const fetchAndSetDeparture = async () => {
@@ -85,126 +101,121 @@ const FlightSearch = ({ onSearch}: { onSearch: (flights: Flight[], totalItems: n
         fetchAndSetArrival()
     }, [arrivalAirport]);
 
-    const [requestCount, setRequestCount] = useState<number>(0);
-    const requestCountRef = useRef(0);
-
-    const incrementRequestCounter = () => {
-        requestCountRef.current += 1;
-        setRequestCount(requestCountRef.current);
-    };
+    useEffect(() => {
+        setFilteredArrivalAirports(filteredArrivalAirports)
+    }, [filteredArrivalAirports]);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setRequestCount(requestCountRef.current);
-            requestCountRef.current = 0;
-        }, 1000);
+        setFilteredDepartureAirports(filteredDepartureAirports)
+    }, [filteredDepartureAirports]);
 
-        return () => clearInterval(interval);
-    }, []);
-
-    const getTodayDate = (): string => {
+    const getTomorrowDate = (): string => {
         const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        const year = tomorrow.getFullYear();
+        const month = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+        const day = String(tomorrow.getDate()).padStart(2, '0');
+
         return `${year}-${month}-${day}`;
     };
-
 
     return (
         <div>
         <form className="search-form" onSubmit={handleSubmit}>
             <div className="form-section">
-                    <div className="form-group">
-                        <label htmlFor="departureAirport">Departure Airport:</label>
-                        <input
-                            type="text"
-                            id="departureAirport"
-                            name="departureAirport"
-                            placeholder="Enter departure airport"
-                            value={departureAirport}
-                            onChange={(e) => setDepartureAirport(e.target.value)}
-                            list="departure-airports-list"
-                            required
-                        />
-                        <datalist id="departure-airports-list">
-                            {filteredDepartureAirports.map((airport) => (
-                                <option key={airport['iata']} value={airport['iata']}>
-                                    {airport['iata'] + ': ' + airport['name']}
-                                </option>
-                            ))}
-                        </datalist>
-                    </div>
-
                 <div className="form-group">
-                        <label htmlFor="arrivalAirport">Arrival Airport:</label>
-                        <input
-                            type=""
-                            id="arrivalAirport"
-                            name="arrivalAirport"
-                            placeholder="Enter arrival airport"
-                            value={arrivalAirport}
-                            onChange={(e) => setArrivalAirport(e.target.value)}
-                            list="arrival-airports-list"
-                            required
-                        />
-                        <datalist id="arrival-airports-list">
-                            {filteredArrivalAirports.map((airport) => (
-                                <option key={airport['iata']} value={airport['iata']}>
-                                    {airport['iata'] + ': ' + airport['name']}
-                                </option>
-                            ))}
-                        </datalist>
-                    </div>
-            </div>
-            <div className="form-section">
+                    <label htmlFor="departureAirport">Departure Airport:</label>
+                    <input
+                        type="text"
+                        id="departureAirport"
+                        name="departureAirport"
+                        placeholder="Enter departure airport"
+                        value={departureAirport}
+                        onChange={(e) => setDepartureAirport(e.target.value)}
+                        list="departure-airports-list"
+                        required
+                    />
+                    <datalist id="departure-airports-list">
+                        {filteredDepartureAirports?.map((airport) => (
+                            <option key={airport['iata']} value={airport['iata']}>
+                                {airport['iata'] + ': ' + airport['name']}
+                            </option>
+                        ))}
+                    </datalist>
+                </div>
                 <div className="form-group">
                     <label htmlFor="departureDate">Departure Date:</label>
                     <input
                         type="date"
                         id="departureDate"
                         name="departureDate"
-                        min={getTodayDate()}
+                        min={getTomorrowDate()}
                         value={departureDate}
                         onChange={(e) => setDepartureDate(e.target.value)}
                         required
                     />
                 </div>
-
+            </div>
+            <div className="form-section">
                 <div className="form-group">
-                    <label htmlFor="returnDate">Return Date:</label>
+                    <label htmlFor="arrivalAirport">Arrival Airport:</label>
                     <input
-                        type="date"
-                        id="returnDate"
-                        name="returnDate"
-                        min={departureDate}
-                        value={returnDate}
-                        onChange={(e) => setReturnDate(e.target.value)}
+                        type=""
+                        id="arrivalAirport"
+                        name="arrivalAirport"
+                        placeholder="Enter arrival airport"
+                        value={arrivalAirport}
+                        onChange={(e) => setArrivalAirport(e.target.value)}
+                        list="arrival-airports-list"
+                        required
                     />
                 </div>
-            </div>
+                <div className="form-group">
+                        <datalist id="arrival-airports-list">
+                            {filteredArrivalAirports?.map((airport) => (
+                                <option key={airport['iata']} value={airport['iata']}>
+                                    {airport['iata'] + ': ' + airport['name']}
+                                </option>
+                            ))}
+                        </datalist>
 
-            <div className="form-group">
-                <label htmlFor="currency">Currency:</label>
-                <select
-                    id="currency"
-                    name="currency"
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value as Money)}
-                >
-                    <option value="MXN">MXN</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                </select>
-                <div className="checkbox-row">
-                    <label htmlFor="nonStop">Non-stop</label>
-                    <input type="checkbox" id="nonStop"
-                           onChange={(e) => setNonStop(Boolean(e.target.value))}/>
+                        <label htmlFor="returnDate">Return Date:</label>
+                        <input
+                            type="date"
+                            id="returnDate"
+                            name="returnDate"
+                            min={departureDate}
+                            value={returnDate}
+                            onChange={(e) => setReturnDate(e.target.value)}
+                        />
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="adults">Adults:</label>
-                    <input type="number" name="adults" id="adults" min="1" placeholder="Enter number of adults"
-                           onChange={(e) => setAdults(Number(e.target.value))}/>
+
+                <div className="form-section">
+                <div className="form-group">
+                    <label htmlFor="currency">Currency:</label>
+                    <select
+                        id="currency"
+                        name="currency"
+                        value={currency}
+                        onChange={(e) => setCurrency(e.target.value as Money)}
+                    >
+                        <option value="MXN">MXN</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                    </select>
+                    <div className="checkbox-row">
+                        <label htmlFor="nonStop">Non-stop</label>
+                        <input type="checkbox" id="nonStop"
+                               onChange={(e) => setNonStop(Boolean(e.target.value))}/>
+                    </div>
+                    <div>
+                        <label htmlFor="adults">Adults:</label>
+                        <input type="number" name="adults" id="adults" min="1" placeholder="Enter number of adults"
+                               onChange={(e) => setAdults(Number(e.target.value))}/>
+                    </div>
                 </div>
             </div>
 

@@ -93,6 +93,9 @@ public class AmadeusService {
                 .path("/reference-data/locations")
                 .queryParam("subType", "AIRPORT")
                 .queryParam("keyword", keyword.toUpperCase())
+                .queryParam("page[limit]", 10)
+                .queryParam("page[offset]", 0)
+                .queryParam("view", "LIGHT")
                 .build().toUriString();
         verifyToken();
         try{
@@ -104,7 +107,6 @@ public class AmadeusService {
                             .maxBackoff(Duration.ofSeconds(8))
                             .jitter(0.5))
                     .block();
-            //System.out.println(keyword);
             return response;
         }catch (Exception e) {
             System.out.println(e.getMessage());
@@ -133,7 +135,7 @@ public class AmadeusService {
                                 .maxBackoff(Duration.ofSeconds(8))
                                 .jitter(0.5))
                         .block();
-                //System.out.println(keyword);
+                System.out.println(response);
                 JSONObject json = new JSONObject(response);
                 String city;
                 try {
@@ -188,6 +190,7 @@ public class AmadeusService {
                     .bodyToMono(String.class)
                     .block();
             parseDictionary(new JSONObject(response));
+            //System.out.println(response);
             return response;
         }catch (Exception e) {
             System.out.println(e.getMessage() + response);
