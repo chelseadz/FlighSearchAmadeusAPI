@@ -40,5 +40,5 @@ This will start the application:
 * The backend will be available at http://localhost:8080
 
 ## Running the Application
-Navigate to http://localhost:3000 to access the UI.
+Navigate to http://localhost:3000 to access the UI in Google Chrome (doesn't work well in edge).
 
