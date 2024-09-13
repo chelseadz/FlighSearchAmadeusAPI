@@ -135,7 +135,6 @@ public class AmadeusService {
                                 .maxBackoff(Duration.ofSeconds(8))
                                 .jitter(0.5))
                         .block();
-                System.out.println(response);
                 JSONObject json = new JSONObject(response);
                 String city;
                 try {

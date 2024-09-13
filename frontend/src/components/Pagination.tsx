@@ -20,7 +20,7 @@ const Pagination = ({totalPages, actualPage, setPage }: any) => {
             <div className="pagination">
                 <button
                     className="navigation-button"
-                    disabled={actualPage === 1}
+                    disabled={actualPage <= 1 }
                     onClick={() => setPage(actualPage - 1)}
                 >
                     &laquo;
@@ -28,7 +28,7 @@ const Pagination = ({totalPages, actualPage, setPage }: any) => {
                 {renderPages()}
                 <button
                     className="navigation-button"
-                    disabled={actualPage === totalPages}
+                    disabled={actualPage >= totalPages }
                     onClick={() => setPage(actualPage + 1)}
                 >
                     &raquo;

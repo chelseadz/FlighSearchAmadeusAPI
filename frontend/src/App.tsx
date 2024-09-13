@@ -13,7 +13,7 @@ function App() {
     const [flights, setFlights] = useState<Flight[]>([]);
     const [view, setView] = useState<'search' | 'results' | 'details'>('search');
     const [flight, setFlight] = useState<Flight>()
-    const [totalItems, setTotalItems] = useState<number>(0)
+    const [totalItems, setTotalItems] = useState(0)
     const pageSize = 10;
     const [pageNumber, setPageNumber] = useState(1);
 

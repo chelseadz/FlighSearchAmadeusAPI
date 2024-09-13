@@ -9,7 +9,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Itinerary {
     private String departureAirport;
