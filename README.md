@@ -1,5 +1,7 @@
 # FlighSearchAmadeusAPI
-Using Amadeus REST API to implement a fight search app
+Using Amadeus REST API to implement a flight search application. 
+
+Users can search flights and look for details on each offer. 
 
 ## Table of Contents
 1. [Technologies Used](#technologies-used)
